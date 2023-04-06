@@ -4,10 +4,14 @@ from django.http import JsonResponse
 
 # Create your views here.
 
+# creatopm of the view, it will render the url
 def post_list_and_create(request):
     qs = Post.objects.all()
     return render(request, 'posts/main.html', {'qs':qs})
 
+# This will help on loading the lists of existing
+# posts, will take into account 3 posts and support
+# increase of 3 posts every time it is triggered
 def load_post_data_view(request, num_posts):
     visible = 3                             # how many posts to show
     upper = num_posts                       # the upper number of posts to show
@@ -30,6 +34,28 @@ def load_post_data_view(request, num_posts):
         # be returned as a JSON object
         data.append(item)
     return JsonResponse({'data':data[lower:upper], 'size':size})
+
+# This will handle the likes and unlikes on the posts, the function will
+# gather the current status of the posts regarding likes and unlikes count and
+# return them in a JSON response
+def like_unlike_post(request):
+    if ajax_view(request):
+        pk = request.POST.get('pk')
+        obj = Post.objects.get(pk=pk)
+        if request.user in obj.liked.all():
+            liked = False
+            obj.liked.remove(request.user)
+        else:
+            liked = True
+            obj.liked.add(request.user)
+        return JsonResponse({'liked': liked, 'count': obj.like_count})
+
+
+def ajax_view(request):
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    # Get requested data and create data dictionary
+    return is_ajax
+
 
 def hello_world_view(request):
     return JsonResponse({'text' : 'hello world'})
