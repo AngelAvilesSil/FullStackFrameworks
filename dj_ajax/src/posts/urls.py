@@ -7,9 +7,10 @@ from .views import (
 
 app_name = 'posts'
 
+# this is how the urls will be build when doing requests in the browser
 urlpatterns = [
     path('', post_list_and_create, name='main-board'),
-    path('data/', load_post_data_view, name='post-data'),
+    path('data/<int:num_posts>/', load_post_data_view, name='post-data'),
 
     path('hello-world/', hello_world_view, name='hello-world')
 ]
