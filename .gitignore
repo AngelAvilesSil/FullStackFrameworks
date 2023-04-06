@@ -3,3 +3,4 @@
 *.pyc
 *.pyd
 requirements.txt
+.vscode/settings.json

@@ -1,13 +1,28 @@
 from django.shortcuts import render
 from .models import Post
 from django.http import JsonResponse
+from .forms import PostForm
+from profiles.models import Profile
 
 # Create your views here.
 
 # creatopm of the view, it will render the url
 def post_list_and_create(request):
-    qs = Post.objects.all()
-    return render(request, 'posts/main.html', {'qs':qs})
+    form = PostForm(request.POST or None)
+    # qs = Post.objects.all()
+
+    if ajax_view(request):
+        if form.is_valid():
+            author = Profile.objects.get(user=request.user)
+            instance = form.save(commit=False)
+            instance.author = author
+            instance.save()
+                       
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'posts/main.html', context)
 
 # This will help on loading the lists of existing
 # posts, will take into account 3 posts and support
@@ -51,6 +66,8 @@ def like_unlike_post(request):
         return JsonResponse({'liked': liked, 'count': obj.like_count})
 
 
+# due to is_ajax being deprecated, I am doing my own
+# version of the same check that should do the same
 def ajax_view(request):
     is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
     # Get requested data and create data dictionary
