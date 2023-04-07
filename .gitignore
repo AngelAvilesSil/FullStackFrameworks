@@ -4,3 +4,5 @@
 *.pyd
 requirements.txt
 .vscode/settings.json
+*.png
+*.jpg
