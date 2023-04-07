@@ -1,9 +1,18 @@
 console.log('hello world')
 
+/* These are the elements from the main page */
 const postsBox = document.getElementById('posts-box')
 const spinnerBox = document.getElementById('spinner-box')
 const loadBtn = document.getElementById('load-btn')
 const endBox = document.getElementById('end-box')
+
+/* These are the elements from the post screen
+prompted when trying to enter a new post */
+const postForm = document.getElementById('post-form')
+const title = document.getElementById('id_title')
+const body = document.getElementById('id_body')
+const csrf = document.getElementsByName('csrfmiddlewaretoken')
+console.log('csrf', csrf[0].value)
 
 /* Getting the cross site request forgery protection
 taken from django documentation
@@ -88,6 +97,9 @@ const getData = () => {
                                         </form>
                                     </div>
                                 </div>
+                                </div>
+                                
+                                </div>         
                                 
                             </div>
                         </div>
@@ -117,6 +129,27 @@ loadBtn.addEventListener('click', ()=>{
     getData()   // need to run it every time button is pressed
 })
 
-/* We alway need to run this initially at the
+
+postForm.addEventListener('submit', e=>{
+    e.preventDefault()
+
+    $.ajax({
+        type: 'POST',
+        url: '',
+        data: {
+            'csrfmiddlewaretoken': csrf[0].value,
+            'title': title.value,
+            'body': body.value,
+        },
+        success: function(response){
+            console.log(response)
+        },
+        error: function(error){
+            console.log(error)
+        }
+    })
+})
+
+/* We always need to run this initially at the
 creation of the document */
 getData()

@@ -9,7 +9,6 @@ from profiles.models import Profile
 # creatopm of the view, it will render the url
 def post_list_and_create(request):
     form = PostForm(request.POST or None)
-    # qs = Post.objects.all()
 
     if ajax_view(request):
         if form.is_valid():
@@ -28,27 +27,28 @@ def post_list_and_create(request):
 # posts, will take into account 3 posts and support
 # increase of 3 posts every time it is triggered
 def load_post_data_view(request, num_posts):
-    visible = 3                             # how many posts to show
-    upper = num_posts                       # the upper number of posts to show
-    lower = upper - visible                 # the lower number of posts to show
-    size = Post.objects.all().count()
+    if ajax_view(request):
+        visible = 3                             # how many posts to show
+        upper = num_posts                       # the upper number of posts to show
+        lower = upper - visible                 # the lower number of posts to show
+        size = Post.objects.all().count()
 
-    qs = Post.objects.all()
-    data = []   # where we will store the data to display
-    # filtering and arranging the deta to be displayed
-    for obj in qs:
-        item = {
-            'id': obj.id,
-            'title': obj.title,
-            'body': obj.body,
-            'liked': True if request.user in obj.liked.all() else False,
-            'count': obj.like_count,
-            'author': obj.author.user.username
-        }
-        # injecting the objects into the data which will
-        # be returned as a JSON object
-        data.append(item)
-    return JsonResponse({'data':data[lower:upper], 'size':size})
+        qs = Post.objects.all()
+        data = []   # where we will store the data to display
+        # filtering and arranging the deta to be displayed
+        for obj in qs:
+            item = {
+                'id': obj.id,
+                'title': obj.title,
+                'body': obj.body,
+                'liked': True if request.user in obj.liked.all() else False,
+                'count': obj.like_count,
+                'author': obj.author.user.username
+            }
+            # injecting the objects into the data which will
+            # be returned as a JSON object
+            data.append(item)
+        return JsonResponse({'data':data[lower:upper], 'size':size})
 
 # This will handle the likes and unlikes on the posts, the function will
 # gather the current status of the posts regarding likes and unlikes count and
