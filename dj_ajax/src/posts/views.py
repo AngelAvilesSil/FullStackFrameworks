@@ -45,7 +45,8 @@ def post_detail(request, pk):
 
 
 
-# 
+# This function will gather the actual contents of a
+# post and will return them as a json response
 def post_detail_data_view(request, pk):
     obj = Post.objects.get(pk=pk)
     data = {
