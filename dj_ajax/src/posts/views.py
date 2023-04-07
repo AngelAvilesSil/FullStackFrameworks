@@ -29,6 +29,22 @@ def post_list_and_create(request):
 
     return render(request, 'posts/main.html', context)
 
+
+# This function will aid on the display of the
+# detailed view from the posts
+def post_detail(request, pk):
+    obj = Post.objects.get(pk=pk)
+    form = PostForm()
+
+    context = {
+        'obj': obj,
+        'form': form,
+    }
+
+    return render(request, 'posts/detail.html', context)
+
+
+
 # This will help on loading the lists of existing
 # posts, will take into account 3 posts and support
 # increase of 3 posts every time it is triggered
@@ -56,6 +72,8 @@ def load_post_data_view(request, num_posts):
             data.append(item)
         return JsonResponse({'data':data[lower:upper], 'size':size})
 
+
+
 # This will handle the likes and unlikes on the posts, the function will
 # gather the current status of the posts regarding likes and unlikes count and
 # return them in a JSON response
@@ -70,6 +88,7 @@ def like_unlike_post(request):
             liked = True
             obj.liked.add(request.user)
         return JsonResponse({'liked': liked, 'count': obj.like_count})
+
 
 
 # due to is_ajax being deprecated, I am doing my own
