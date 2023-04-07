@@ -105,13 +105,37 @@ def like_unlike_post(request):
 
 
 
+# This is the function that get the information for updating
+# the posts, should return a JsonResponse
+def update_post(request, pk):
+    obj = Post.objects.get(pk=pk)
+    if ajax_view(request):
+        new_title = request.POST.get('title')
+        new_body = request.POST.get('body')
+        obj.title = new_title
+        obj.body = new_body
+        obj.save()
+        return JsonResponse({
+            'title': new_title,
+            'body': new_body,
+        })
+    
+
+
+
+# This is the functions that get object that must be deleted
+# returns an empty JsonResponse
+def delete_post(request, pk):
+    obj = Post.objects.get(pk=pk)
+    if ajax_view(request):
+        obj.delete()
+        return JsonResponse({})
+
+
+
 # due to is_ajax being deprecated, I am doing my own
 # version of the same check that should do the same
 def ajax_view(request):
     is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
     # Get requested data and create data dictionary
     return is_ajax
-
-
-def hello_world_view(request):
-    return JsonResponse({'text' : 'hello world'})
