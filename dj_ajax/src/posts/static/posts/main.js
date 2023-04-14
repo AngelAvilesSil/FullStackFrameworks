@@ -18,7 +18,10 @@ const url = window.location.href
 /* This is the alert box that will inform if a post was succesful
 or not */
 const alertBox = document.getElementById('alert-box')
-console.log('csrf', csrf[0].value)
+
+const dropzone= document.getElementById('my-dropzone')
+const addBtn = document.getElementById('add-btn')
+const closeBtns = [...document.getElementsByClassName('add-modal-close')]
 
 /* Getting the cross site request forgery protection
 taken from django documentation
@@ -176,9 +179,9 @@ postForm.addEventListener('submit', e=>{
                 </div>
             `)
             likeUnlikePosts()
-            $('#addPostModal').modal('hide')
+            // $('#addPostModal').modal('hide')
             handleAlerts('success', 'New post added!')
-            postForm.reset()
+            // postForm.reset()
         },
         error: function(error){
             console.log(error)
@@ -186,6 +189,17 @@ postForm.addEventListener('submit', e=>{
         }
     })
 })
+
+addBtn.addEventListener('click', ()=>{
+    dropzone.classList.remove('not-visible')
+})
+
+closeBtns.forEach(btn=> btn.addEventListener('click', ()=>{
+    postForm.reset()
+    if (!dropzone.classList.contains('not-visible')) {
+        dropzone.classList.add('not-visible')
+    }
+}))
 
 /* We always need to run this initially at the
 creation of the document */
