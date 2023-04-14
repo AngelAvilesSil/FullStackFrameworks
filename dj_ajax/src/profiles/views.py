@@ -1,3 +1,32 @@
 from django.shortcuts import render
+from  .models import Profile
+from .forms import ProfileForm
+from django.http import JsonResponse
 
 # Create your views here.
+
+def my_profile_view(request):
+    obj = Profile.objects.get(user=request.user)
+    form = ProfileForm(request.POST or None, request.FILES or None, instance=obj)
+    if ajax_view(request):
+        if form.is_valid():
+            instance = form.save()
+            return JsonResponse({
+                'bio': instance.bio,
+                'avatar': instance.avatar.url,
+                'user': instance.user.username
+            })
+    context = {
+        'obj': obj,
+        'form': form,
+    }
+    return render(request, 'profiles/main.html', context)
+
+
+
+# due to is_ajax being deprecated, I am doing my own
+# version of the same check that should do the same
+def ajax_view(request):
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    # Get requested data and create data dictionary
+    return is_ajax
