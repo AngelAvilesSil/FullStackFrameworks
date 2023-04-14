@@ -196,15 +196,21 @@ postForm.addEventListener('submit', e=>{
 dropzone invisible until the post is submitted */
 addBtn.addEventListener('click', ()=>{
     dropzone.classList.remove('not-visible')
+    addBtn.classList.add('not-visible')
 })
 
 /* The modal form will be reset only after clicking any
 of the clossing buttons */
 closeBtns.forEach(btn=> btn.addEventListener('click', ()=>{
     postForm.reset()
+    if (addBtn.classList.contains('not-visible')) {
+        addBtn.classList.remove('not-visible')
+    }
     if (!dropzone.classList.contains('not-visible')) {
         dropzone.classList.add('not-visible')
     }
+    const myDropzone = Dropzone.forElement("#my-dropzone")
+    myDropzone.removeAllFiles(true)
 }))
 
 Dropzone.autoDiscover = false
