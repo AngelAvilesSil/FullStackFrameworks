@@ -4,10 +4,12 @@ from django.http import JsonResponse, HttpResponse
 from .forms import PostForm
 from profiles.models import Profile
 from .utils import action_permission
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-# creatopm of the view, it will render the url
+# creation of the view, it will render the url
+@login_required
 def post_list_and_create(request):
     form = PostForm(request.POST or None)
 
@@ -33,6 +35,7 @@ def post_list_and_create(request):
 
 # This function will aid on the display of the
 # detailed view from the posts
+@login_required
 def post_detail(request, pk):
     obj = Post.objects.get(pk=pk)
     form = PostForm()
@@ -48,6 +51,7 @@ def post_detail(request, pk):
 
 # This function will gather the actual contents of a
 # post and will return them as a json response
+@login_required
 def post_detail_data_view(request, pk):
     obj = Post.objects.get(pk=pk)
     data = {
@@ -63,6 +67,7 @@ def post_detail_data_view(request, pk):
 # This will help on loading the lists of existing
 # posts, will take into account 3 posts and support
 # increase of 3 posts every time it is triggered
+@login_required
 def load_post_data_view(request, num_posts):
     if ajax_view(request):
         visible = 3                             # how many posts to show
@@ -92,6 +97,7 @@ def load_post_data_view(request, num_posts):
 # This will handle the likes and unlikes on the posts, the function will
 # gather the current status of the posts regarding likes and unlikes count and
 # return them in a JSON response
+@login_required
 def like_unlike_post(request):
     if ajax_view(request):
         pk = request.POST.get('pk')
@@ -108,6 +114,8 @@ def like_unlike_post(request):
 
 # This is the function that get the information for updating
 # the posts, should return a JsonResponse
+@login_required
+@action_permission
 def update_post(request, pk):
     obj = Post.objects.get(pk=pk)
     if ajax_view(request):
@@ -123,9 +131,9 @@ def update_post(request, pk):
     
 
 
-
 # This is the functions that get object that must be deleted
 # returns an empty JsonResponse
+@login_required
 @action_permission
 def delete_post(request, pk):
     obj = Post.objects.get(pk=pk)
@@ -138,6 +146,7 @@ def delete_post(request, pk):
 
 # This is the function that will handle the upload of files to
 # the posts
+@login_required
 def image_upload_view(request):
     print(request.FILES)
     if request.method == 'POST':
