@@ -41,18 +41,24 @@ $.ajax({
             deleteBtn.classList.remove('not-visible')
         }
 
-        const titleEl = document.createElement('h3')
+        const titleEl = document.createElement('h2')
         titleEl.setAttribute('class', 'mt-3')
         titleEl.setAttribute('id', 'title')
+
+        const authorEl = document.createElement('h5')
+        authorEl.setAttribute('class', 'mt-1')
+        authorEl.setAttribute('id','author')
 
         const bodyEl = document.createElement('p')
         bodyEl.setAttribute('class', 'mt-1')
         bodyEl.setAttribute('id', 'body')
 
         titleEl.textContent = data.title
+        authorEl.textContent = 'by ' + data.author
         bodyEl.textContent = data.body
         
         postBox.appendChild(titleEl)
+        postBox.appendChild(authorEl)
         postBox.appendChild(bodyEl)
 
         titleInput.value = data.title
