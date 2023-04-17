@@ -1,11 +1,5 @@
 
-*.sqlite3
-*.pyc
-*.pyd
-requirements.txt
 .vscode/settings.json
-*.png
-*.jpg
 *.docx
 *.pdf
 *.bundle
