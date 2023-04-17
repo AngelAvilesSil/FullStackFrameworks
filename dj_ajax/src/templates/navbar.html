@@ -1,0 +1,26 @@
+{% url 'posts:main-board' as path_to_home %}
+{% url 'profiles:my-profile' as path_to_my_profile %}
+{% url 'posts:post-detail' as path_to_detail %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+    {% if request.path == path_to_home %}
+        <a class="navbar-brand" href="{{path_to_my_profile}}">Go to profile</a>
+    {% elif request.path == path_to_my_profile %}
+        <a class="navbar-brand" href="{{path_to_home}}">Go to posts</a>
+    {% endif %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class='navbar-nav'>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == path_to_home %}active{% endif %}">Home</a>
+                </li>
+                <li>
+                    <a class="nav-link {% if request.path == path_to_my_profile %}active{% endif %}">My Profile</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
