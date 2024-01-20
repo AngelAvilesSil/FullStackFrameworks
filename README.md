@@ -15,6 +15,6 @@ This project simulates a web application; it precisely simulates a social media 
 - Open CMD, navigate to `dj_ajax\Scripts`, then type `activate.bat.`
 - Navigate to `dj_ajax\src` and type `py manage.py runserver localhost:[PORT]`. Replace the PORT for your desired (8001 is okay).
 - In a new CMD pointing to dj_ajax\Scripts, type `python manage.py changepassword armando` and type your desired password.
-- In a browser, open the address you selected, localhost:port.
+- In a browser, open your selected address, localhost:port.
 - Enter `armando` as user and the password you entered, this is the admin user.
 - You can go to the site from the server itself, create more users to distribute to other computers in the same network and enjoy!!
